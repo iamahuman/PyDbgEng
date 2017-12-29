@@ -29,7 +29,6 @@ and `dbg.crash_description` like this:
    0	id: 2b8	create	name: iexplore.exe
 .  1	id: 7a8	child	name: iexplore.exe
 r
-*** ERROR: Symbol file could not be found.  Defaulted to export symbols for C:\Windows\System32\jscript.dll - 
 rax=0000000000000000 rbx=0000000000000000 rcx=000000000000fffb
 rdx=0000000000000005 rsi=000000000720b068 rdi=000000000720afb8
 rip=000007fef04019b9 rsp=000000000720ae30 rbp=0000000004d7af90
