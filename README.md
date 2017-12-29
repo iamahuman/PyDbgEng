@@ -92,7 +92,7 @@ If debugged process is terminated, `dbg.crash_name` and `dbg.crash_description` 
 2. download PyDbgEng and run python setup.py install.
 
 ## Versions
-The current version is `v0.0.5`, PyDbgEng can run in windows currectly:
+The current version is `v0.0.5`, and it now can run in windows currectly. If you want to use it in linux or mac ,please wait some times.
 
   * fix bug when comtypes.gen isn't exist.
   * fix bug when killing debugged process and child process.
