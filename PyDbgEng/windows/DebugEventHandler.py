@@ -5,7 +5,7 @@ import subprocess
 try:
     from comtypes.gen import DbgEng
 except ImportError:
-    import comtypes
+    import comtypes.client
     tlb = os.path.join(os.path.dirname(__file__), "utils", "DbgEng.tlb")
     comtypes.client.GetModule(tlb)
     from comtypes.gen import DbgEng
