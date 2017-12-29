@@ -33,9 +33,6 @@ r
 rax=0000000000000000 rbx=0000000000000000 rcx=000000000000fffb
 rdx=0000000000000005 rsi=000000000720b068 rdi=000000000720afb8
 rip=000007fef04019b9 rsp=000000000720ae30 rbp=0000000004d7af90
- r8=0000000000000000  r9=0000000004da2670 r10=0000000000000081
-r11=000000000720ae10 r12=0000000000000000 r13=0000000000000001
-r14=0000000004cdcb10 r15=000000000720af00
 iopl=0         nv up ei pl nz na pe nc
 cs=0033  ss=002b  ds=002b  es=002b  fs=0053  gs=002b             efl=00010202
 jscript!DllUnregisterServer+0x1e049:
@@ -67,11 +64,11 @@ INVOKING_STACK_FRAME:0
 DESCRIPTION:User Mode Write AV
 SHORT_DESCRIPTION:WriteAV
 CLASSIFICATION:EXPLOITABLE
-BUG_TITLE:Exploitable - User Mode Write AV starting at jscript!DllUnregisterServer+0x000000000001e049 (Hash=0x1b75c019.0xb5221dd3)
+BUG_TITLE:Exploitable - User Mode Write AV ..
 EXPLANATION:User mode write access violations that are not near NULL are exploitable.
 ```
 
-if debugged process is terminated, `dbg.crash_name` and `dbg.crash_description` will set to None.
+If debugged process is terminated, `dbg.crash_name` and `dbg.crash_description` will set to None.
 
 ## Features
 
