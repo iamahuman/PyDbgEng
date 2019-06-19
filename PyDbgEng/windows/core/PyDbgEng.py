@@ -17,8 +17,22 @@ except ImportError:
     from comtypes.gen import DbgEng
 
 # utility functions
-BUFFER_TO_ANSI_STRING = lambda buf: buf[:buf.find(b"\x00")]
-BUFFER_TO_UNI_STRING = lambda buf: buf[slice(0, buf.find(b"\x00\x00"), 2)]
+def BUFFER_TO_ANSI_STRING(buf):
+    x = buf.find(b'\0')
+    if x >= 0:
+        buf = buf[:x]
+    return buf
+
+def BUFFER_TO_UNI_STRING(buf):
+    x = 0
+    while True:
+        x = buf.find(b'\0\0', x)
+        if x < 0:
+            return buf
+        if x % 2 == 0:
+            return buf[:x]
+        x += 1
+
 
 debug_create_prototype = WINFUNCTYPE(HRESULT, POINTER(IID),
                                      POINTER(POINTER(DbgEng.IDebugClient)))
