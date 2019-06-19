@@ -458,17 +458,20 @@ class PyDbgEng(IDebugEventCallbacksSink):
                preferred_id=DbgEng.DEBUG_ANY_ID,
                restore=True,
                handler=None):
-        # if a list of addresses to set breakpoints on from was supplied
-        if type(address) is list:
-            # pass each lone address to ourself.
-            for idx, addr in enumerate(address):
-                # hackorama - each bp will have a unique id
-                self.bp_set(addr, preferred_id + idx, restore)
-
-            return
-
-        if type(address) is str:
+        if isinstance(address, (str, bytes)):
             address = self.resolve_symbol(address)
+        else:
+            try:
+                itr = enumerate(address, preferred_id)
+            except TypeError:
+                pass
+            else:
+                # if a list of addresses to set breakpoints on from was supplied
+                # pass each lone address to ourself.
+                for idx, addr in itr:
+                    # hackorama - each bp will have a unique id
+                    self.bp_set(addr, idx, restore)
+                return
 
         # its so easy, it should be illegal...
         bp_params = self.idebug_control.AddBreakpoint(
