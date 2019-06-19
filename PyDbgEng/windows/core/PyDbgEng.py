@@ -221,46 +221,46 @@ class PyDbgEng(IDebugEventCallbacksSink):
             self.idebug_client.SetEventCallbacks(self.old_event_callbacks)
 
         if self.idebug_client is not None and self.old_output_callbacks is not None:
-            #print "__dell__ - old_output_callbacks"
+            #print "__del__ - old_output_callbacks"
             self.idebug_client.SetOutputCallbacks(self.old_output_callbacks)
 
         if self.idebug_client is not None and self.new_event_callbacks is not None:
-            #print "__dell__ - new_event_callbacks"
+            #print "__del__ - new_event_callbacks"
             self.new_event_callbacks._pyDbgEng = None
             self.new_event_callbacks.IUnknown_Release(self.new_event_callbacks)
             self.new_event_callbacks = None
 
         if self.idebug_client is not None and self.new_output_callbacks is not None:
-            #print "__dell__ - new_output_callbacks"
+            #print "__del__ - new_output_callbacks"
             self.new_output_callbacks._pyDbgEng = None
             self.new_output_callbacks.IUnknown_Release(
                 self.new_output_callbacks)
             self.new_output_callbacks = None
 
         if self.idebug_system_objects is not None:
-            #print "__dell__ - idebug_system_objects"
+            #print "__del__ - idebug_system_objects"
             self.idebug_system_objects = None
 
         if self.idebug_symbols is not None:
-            #print "__dell__ - idebug_symbols"
+            #print "__del__ - idebug_symbols"
             self.idebug_symbols = None
 
         if self.idebug_registers is not None:
-            #print "__dell__ - idebug_registers"
+            #print "__del__ - idebug_registers"
             self.idebug_registers = None
 
         if self.idebug_data_spaces is not None:
-            #print "__dell__ - idebug_data_spaces"
+            #print "__del__ - idebug_data_spaces"
             self.idebug_data_spaces = None
 
         if self.idebug_control is not None:
-            #print "__dell__ - idebug_control"
+            #print "__del__ - idebug_control"
             self.idebug_control = None
 
-        #print "__dell__ - idebug_client"
+        #print "__del__ - idebug_client"
         if self.idebug_client is not None:
             try:
-                #print "__dell__ - EndSession", self.idebug_client
+                #print "__del__ - EndSession", self.idebug_client
                 self.idebug_client.EndSession(
                     DbgEng.DEBUG_END_ACTIVE_TERMINATE)
 
