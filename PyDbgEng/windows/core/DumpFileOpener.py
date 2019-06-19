@@ -1,5 +1,3 @@
-#! /user/bin/python
-# coding:UTF-8
 
 from .Defines import INFINITE
 from .PyDbgEng import PyDbgEng
