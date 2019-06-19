@@ -16,23 +16,6 @@ except ImportError:
     comtypes.client.GetModule(tlb)
     from comtypes.gen import DbgEng
 
-# utility functions
-def BUFFER_TO_ANSI_STRING(buf):
-    x = buf.find(b'\0')
-    if x >= 0:
-        buf = buf[:x]
-    return buf
-
-def BUFFER_TO_UNI_STRING(buf):
-    x = 0
-    while True:
-        x = buf.find(b'\0\0', x)
-        if x < 0:
-            return buf
-        if x % 2 == 0:
-            return buf[:x]
-        x += 1
-
 
 LP_IDebugClient = POINTER(DbgEng.IDebugClient)
 debug_create_prototype = WINFUNCTYPE(HRESULT, POINTER(IID),
@@ -463,8 +446,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
         self.idebug_symbols.GetNameByOffset(address, name_buf,
                                             sizeof(name_buf),
                                             byref(displacement))
-        name = BUFFER_TO_ANSI_STRING(name_buf.raw)
-        return (name, displacement.value)
+        return (name_buf.value, displacement.value)
 
     def get_symbol(self, address):
         symbol, displacement = self.get_symbol_with_displacement(address)
@@ -541,16 +523,18 @@ class PyDbgEng(IDebugEventCallbacksSink):
         raise NotImplementedError
 
     # memory functions
-    def read_virtual_memory(self, address, length):
-        read_buf = create_string_buffer(length)
+    def read_virtual_memory_into(self, address, read_buf):
+        length = sizeof(read_buf)
         bytes_read = c_ulong(0)
-
         self.idebug_data_spaces.ReadVirtual(address, read_buf, length,
                                             byref(bytes_read))
-        if bytes_read.value != length:
+        return bytes_read.value
+
+    def read_virtual_memory(self, address, length):
+        read_buf = create_string_buffer(length)
+        if self._read_virtual_memory(address, read_buf) != length:
             raise DebuggerException(
                 "read_virtual_memory(): ReadVirtual() failed")
-
         return read_buf.raw
 
     def read_dword(self, pdword):
@@ -558,24 +542,28 @@ class PyDbgEng(IDebugEventCallbacksSink):
         return struct.unpack("<I", buffer)[0]
 
     def read_char_string(self, pchar_string, string_len):
-        string_buffer = self.read_virtual_memory(pchar_string, string_len)
-        return BUFFER_TO_ANSI_STRING(string_buffer + b"\x00")
+        read_buf = create_string_buffer(string_len)
+        self.read_virtual_memory_into(pchar_string, read_buf)
+        return read_buf.value
 
     def read_wchar_string(self, pwchar_string, string_len):
-        string_buffer = self.read_virtual_memory(pwchar_string, string_len)
-        return BUFFER_TO_UNI_STRING(string_buffer + b"\x00\x00")
+        read_buf = create_unicode_buffer(string_len)
+        self.read_virtual_memory_into(pchar_string, read_buf)
+        return read_buf.value
 
     def read_unicode_string(self, punicode_string):
         uni_struct_buffer = self.read_virtual_memory(punicode_string,
                                                      SIZE_OF_UNICODE_STRING)
-        object_name_length = struct.unpack(
+        length = struct.unpack(
             "<H", uni_struct_buffer[UNICODE_STRING_OFFSET_TO_LENGTH:
                                     UNICODE_STRING_OFFSET_TO_LENGTH + 2])[0]
-        object_name_ptr = struct.unpack(
+        ptr = struct.unpack(
             "<I",
             uni_struct_buffer[UNICODE_STRING_OFFSET_TO_BUFFER_PTR:
                               UNICODE_STRING_OFFSET_TO_BUFFER_PTR + 4])[0]
-        return self.read_wchar_string(object_name_ptr, object_name_length)
+        read_buf = create_unicode_buffer(length)
+        self.read_virtual_memory_into(ptr, length)
+        return read_buf.raw
 
     def read_object_attributes(self, pobject_attributes):
         object_attributes_buffer = self.read_virtual_memory(
