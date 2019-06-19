@@ -62,9 +62,9 @@ class UserModeSession(PyDbgEng):
             handle_data_buffer = create_string_buffer(handle_data_size)
 
             try:
-                self.idebug_data_spaces.ReadHandleData( handle, \
-                                                        DbgEng.DEBUG_HANDLE_DATA_TYPE_OBJECT_NAME, \
-                                                        byref(handle_data_buffer), \
+                self.idebug_data_spaces.ReadHandleData( handle,
+                                                        DbgEng.DEBUG_HANDLE_DATA_TYPE_OBJECT_NAME,
+                                                        byref(handle_data_buffer),
                                                         handle_data_size)
 
                 if handle_data_buffer.raw.find("\x00") != -1:
