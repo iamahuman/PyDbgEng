@@ -150,7 +150,6 @@ class PyDbgEng(IDebugEventCallbacksSink):
             os.system("%s %s -regserver" %
                       (sys.executable, self.findDbgEngEvent()))
             self.idebug_client = creator.create_idebug_client(self.dbgeng_dll)
-            pass
 
         self.idebug_control = self.idebug_client.QueryInterface(
             interface=DbgEng.IDebugControl)

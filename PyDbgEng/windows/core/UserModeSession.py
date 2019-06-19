@@ -61,7 +61,6 @@ class UserModeSession(PyDbgEng):
             except COMError as e:
                 if e[0] != int(STRSAFE_E_INSUFFICIENT_BUFFER):
                     raise
-                pass
         return BUFFER_TO_ANSI_STRING(handle_data_buffer.raw)
 
     # thread functions
