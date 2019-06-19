@@ -7,15 +7,8 @@ class ProcessCreator(UserModeSession):
     debug a new process.
     '''
 
-    def __init__(self,
-                 command_line,
-                 follow_forks=True,
-                 event_callbacks_sink=None,
-                 output_callbacks_sink=None,
-                 dbg_eng_dll_path=None,
-                 symbols_path=None):
-        PyDbgEng.__init__(self, event_callbacks_sink, output_callbacks_sink,
-                          dbg_eng_dll_path, symbols_path)
+    def __init__(self, command_line, follow_forks=True, *args, **kwargs):
+        super(ProcessCreator, self).__init__(*args, **kwargs)
         # create debuggee process
         self.idebug_client.CreateProcess(
             Server=UserModeSession.NO_PROCESS_SERVER,

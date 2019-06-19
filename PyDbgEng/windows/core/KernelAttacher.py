@@ -30,15 +30,8 @@ class KernelAttacher(PyDbgEng):
                         Flags=DbgEng.DEBUG_INTERRUPT_EXIT)
                     break
 
-    def __init__(self,
-                 connection_string,
-                 set_initial_bp=True,
-                 event_callbacks_sink=None,
-                 output_callbacks_sink=None,
-                 dbg_eng_dll_path=None,
-                 symbols_path=None):
-        PyDbgEng.__init__(self, event_callbacks_sink, output_callbacks_sink,
-                          dbg_eng_dll_path, symbols_path)
+    def __init__(self, connection_string, set_initial_bp=True, *args, **kwargs):
+        super(KernelAttacher, self).__init__(*args, **kwargs)
 
         self.force_quit_flag = False
         self.is_deleted = False
