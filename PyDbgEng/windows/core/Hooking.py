@@ -30,13 +30,13 @@ class hook:
             args = list(map(dbg.get_arg, range(1, self.num_args + 1)))
 
             # if an entry point callback was specified, call it and grab the return value.
-            if self.entry_hook:
-                self.entry_hook(dbg, args)
+            entry_hook = self.entry_hook
+            callable(entry_hook) and entry_hook(dbg, args)
 
             # if an exit hook callback was specified, determine the function exit.
-            if self.exit_hook:
-                # set a breakpoint on the function exit.
-                dbg.bp_set(dbg.get_arg(0),
-                           restore=False,
-                           handler=lambda dbg: self.exit_hook(dbg, args, dbg.get_register_value("eax")))
+            exit_hook = self.exit_hook
+            callable(exit_hook) and dbg.bp_set(
+                    dbg.get_arg(0),
+                    restore=False,
+                    handler=lambda dbg: exit_hook(dbg, args, dbg.get_register_value("eax")))
         dbg.bp_set(self.address, restore=True, handler=on_entry)
