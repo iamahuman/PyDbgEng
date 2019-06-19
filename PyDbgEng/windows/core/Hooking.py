@@ -35,10 +35,8 @@ class hook:
 
             # if an exit hook callback was specified, determine the function exit.
             if self.exit_hook:
-                function_exit = dbg.get_arg(0)
-
                 # set a breakpoint on the function exit.
-                dbg.bp_set(function_exit,
+                dbg.bp_set(dbg.get_arg(0),
                            restore=False,
                            handler=lambda dbg: self.exit_hook(dbg, args, dbg.get_register_value("eax")))
         dbg.bp_set(self.address, restore=True, handler=on_entry)
