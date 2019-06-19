@@ -31,13 +31,14 @@ class hook:
 
     def __proxy_on_entry(self, dbg):
         tid = dbg.get_current_tid()
-        self.arguments[tid] = []
+        args = []
+        self.arguments[tid] = args
         for i in range(1, self.num_args + 1):
-            self.arguments[tid].append(dbg.get_arg(i))
+            args.append(dbg.get_arg(i))
 
         # if an entry point callback was specified, call it and grab the return value.
         if self.entry_hook:
-            self.entry_hook(dbg, self.arguments[tid])
+            self.entry_hook(dbg, args)
 
         # if an exit hook callback was specified, determine the function exit.
         if self.exit_hook:
