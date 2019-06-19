@@ -499,7 +499,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
 
     # cpu state functions
     def fill_register_map(self):
-        if len(self.register_index_map) == 0:
+        if not self.register_index_map:
             # register index map
             for name in [
                     "eax", "ebx", "ecx", "edx", "esi", "edi", "ebp", "esp"
