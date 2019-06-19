@@ -59,8 +59,7 @@ class IDebugOutputCallbacksSink:
 
 class IDebugEventCallbacksSink:
     def GetInterestMask(self):
-        raise DebuggerException(
-            "IDebugEventCallbacksSink.GetInterestMask() must be implemented")
+        raise NotImplementedError
 
     def Breakpoint(self, this, Offset, Id, BreakType, ProcType, Flags,
                    DataSize, DataAccessType, PassCount, CurrentPassCount,
@@ -445,18 +444,15 @@ class PyDbgEng(IDebugEventCallbacksSink):
     # event loops
     def event_loop_with_user_callback(self, user_callback,
                                       user_callback_pool_interval_ms):
-        raise DebuggerException(
-            "PyDbgEng.event_loop_with_user_callback() must be implemented")
+        raise NotImplementedError
 
     def event_loop_with_quit_event(self, quit_event):
         print("%%% About to throw exception: event_loop_with_quit_event %%%")
-        raise DebuggerException(
-            "PyDbgEng.event_loop_with_quit_event() must be implemented")
+        raise NotImplementedError
 
     # handle functions
     def get_handle_data(self, handle):
-        raise DebuggerException(
-            "PyDbgEng.get_handle_data() must be implemented")
+        raise NotImplementedError
 
     # symbol management
     def resolve_symbol(self, symbol):
@@ -543,8 +539,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
 
     # thread functions
     def get_current_tid(self):
-        raise DebuggerException(
-            "PyDbgEng.get_current_tid() must be implemented")
+        raise NotImplementedError
 
     # memory functions
     def read_virtual_memory(self, address, length):
