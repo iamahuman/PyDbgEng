@@ -464,11 +464,8 @@ class PyDbgEng(IDebugEventCallbacksSink):
         return (name, displacement.value)
 
     def get_symbol(self, address):
-        (symbol, displacement) = self.get_symbol_with_displacement(address)
-        if displacement:
-            return "%s + 0x%x" % (symbol, displacement)
-        else:
-            return symbol
+        symbol, displacement = self.get_symbol_with_displacement(address)
+        return "%s + 0x%x" % (symbol, displacement) if displacement else symbol
 
     # breakpoint management
     def bp_set(self,
