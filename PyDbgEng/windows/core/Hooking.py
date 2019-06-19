@@ -24,7 +24,6 @@ class hook:
         self.num_args = num_args
         self.entry_hook = entry_hook
         self.exit_hook = exit_hook
-        self.arguments = {}
 
     def hook(self, dbg):
         dbg.bp_set(self.address, restore=True, handler=self.__proxy_on_entry)
@@ -32,7 +31,6 @@ class hook:
     def __proxy_on_entry(self, dbg):
         tid = dbg.get_current_tid()
         args = list(map(dbg.get_arg, range(1, self.num_args + 1)))
-        self.arguments[tid] = args
 
         # if an entry point callback was specified, call it and grab the return value.
         if self.entry_hook:
