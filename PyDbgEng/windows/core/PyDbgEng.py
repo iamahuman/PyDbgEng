@@ -447,7 +447,6 @@ class PyDbgEng(IDebugEventCallbacksSink):
         raise NotImplementedError
 
     def event_loop_with_quit_event(self, quit_event):
-        print("%%% About to throw exception: event_loop_with_quit_event %%%")
         raise NotImplementedError
 
     # handle functions
