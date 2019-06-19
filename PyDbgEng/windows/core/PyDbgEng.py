@@ -153,7 +153,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
         # create main interfaces
         try:
             self.idebug_client = create_idebug_client(self.dbgeng_dll)
-        except:
+        except Exception:
             # Try registering it
             import os, sys
             os.system("%s %s -regserver" %
