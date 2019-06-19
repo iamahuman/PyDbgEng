@@ -36,13 +36,13 @@ class UserModeSession(PyDbgEng):
             raise DebuggerException(
                 "UserModeSession.event_loop_with_user_callback(): invalid user_callback_pool_interval_ms"
             )
-        while self.wait_for_event(user_callback_pool_interval_ms) != False and user_callback(self) != True:
+        while self.wait_for_event(user_callback_pool_interval_ms) and not user_callback(self):
             pass
 
     def event_loop_with_quit_event(self, quit_event):
         #if not isinstance(quit_event, threading._Event):
         #    raise DebuggerException("UserModeSession.event_loop_with_quit_event(): invalid quit_event")
-        while not quit_event.is_set() and self.wait_for_event(200) != False:
+        while not quit_event.is_set() and self.wait_for_event(200):
             pass
 
     # handle functions
