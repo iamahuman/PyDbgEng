@@ -110,22 +110,6 @@ class PyDbgEng(IDebugEventCallbacksSink):
 	base class used creating dbgeng interfaces and registring event sink.
 	client should NOT use this class directly.
 	'''
-    dbghelp_dll = None
-    dbgeng_dll = None
-    idebug_client = None
-    idebug_control = None
-    idebug_data_spaces = None
-    idebug_registers = None
-    idebug_symbols = None
-    idebug_system_objects = None
-    event_proxy_creator = None
-    output_proxy_creator = None
-    old_event_callbacks = None
-    old_output_callbacks = None
-    event_callbacks_sink = None
-    event_callbacks_sink_intereset_mask = 0
-    breakpoints = {}
-    register_index_map = {}
 
     def findDbgEngEvent(self):
         import sys, os
@@ -143,6 +127,13 @@ class PyDbgEng(IDebugEventCallbacksSink):
                  output_callbacks_sink=None,
                  dbg_eng_dll_path=None,
                  symbols_path=None):
+        self.old_event_callbacks = None
+        self.old_output_callbacks = None
+        self.event_callbacks_sink = None
+        self.event_callbacks_sink_intereset_mask = 0
+        self.breakpoints = {}
+        self.register_index_map = {}
+
         # load dbgeng dlls
         self.dbghelp_dll = windll.LoadLibrary(dbg_eng_dll_path +
                                               "\\dbghelp.dll")

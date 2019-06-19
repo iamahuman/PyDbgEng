@@ -10,13 +10,9 @@ class KernelAttacher(PyDbgEng):
     '''
     used for kernel mode debugging.
     '''
-    force_quit_flag = None
-    is_deleted = False
 
     class QuitEventWaiter(threading.Thread):
-        quit_event = None
-        abort_event = None
-        top = None
+
         def __init__(self, quit_event, abort_event, top):
             self.quit_event = quit_event
             self.abort_event = abort_event

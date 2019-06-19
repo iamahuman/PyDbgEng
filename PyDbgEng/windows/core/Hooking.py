@@ -2,7 +2,6 @@ from .DebuggerException import *
 
 
 class hook_container:
-    hooks = []
 
     def __init__(self):
         self.hooks = []
@@ -19,12 +18,6 @@ class hook_container:
 
 
 class hook:
-    hooks = None
-    address = 0
-    num_args = 0
-    entry_hook = None
-    exit_hook = None
-    arguments = {}
 
     def __init__(self, address, num_args, entry_hook=None, exit_hook=None):
         self.address = address

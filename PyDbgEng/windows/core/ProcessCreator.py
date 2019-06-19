@@ -6,7 +6,6 @@ class ProcessCreator(UserModeSession):
     '''
     debug a new process.
     '''
-    follow_forks = False
 
     def __init__(self,
                  command_line,
