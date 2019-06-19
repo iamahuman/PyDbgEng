@@ -57,7 +57,7 @@ class UserModeSession(PyDbgEng):
         handle_data_size = 0
         handle_data_buffer = None
 
-        while 1:
+        while True:
             handle_data_size += 256
             handle_data_buffer = create_string_buffer(handle_data_size)
 
