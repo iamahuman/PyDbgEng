@@ -17,10 +17,10 @@ class KernelAttacher(PyDbgEng):
             self.quit_event = quit_event
             self.abort_event = abort_event
             self.top = top
-            threading.Thread.__init__(self, target=self.wait_for_quit_event)
+            threading.Thread.__init__(self)
             threading.Thread.start(self)
 
-        def wait_for_quit_event(self):
+        def run(self):
             while not self.abort_event.is_set():
                 self.quit_event.wait(0.02)  # wait for 200ms
                 if self.quit_event.is_set():
