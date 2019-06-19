@@ -29,8 +29,7 @@ def create_idebug_client(dbgeng_dll):
 
     # call DebugCreate()
     idebug_client = POINTER(DbgEng.IDebugClient)()
-    idebug_client_ptr = POINTER(POINTER(
-        DbgEng.IDebugClient))(idebug_client)
+    idebug_client_ptr = POINTER(POINTER(DbgEng.IDebugClient))(idebug_client)
     hr = debug_create_func(DbgEng.IDebugClient._iid_, idebug_client_ptr)
     if hr != S_OK:
         raise DebuggerException("DebugCreate() failed with %x" % hr)
@@ -468,7 +467,6 @@ class PyDbgEng(IDebugEventCallbacksSink):
                preferred_id=DbgEng.DEBUG_ANY_ID,
                restore=True,
                handler=None):
-
         # if a list of addresses to set breakpoints on from was supplied
         if type(address) is list:
             # pass each lone address to ourself.
