@@ -45,7 +45,4 @@ class hook:
             # set a breakpoint on the function exit.
             dbg.bp_set(function_exit,
                        restore=False,
-                       handler=self.__proxy_on_exit)
-
-    def __proxy_on_exit(self, dbg):
-        self.exit_hook(dbg, self.arguments[dbg.get_current_tid()], dbg.get_register_value("eax"))
+                       handler=lambda dbg: self.exit_hook(dbg, self.arguments[dbg.get_current_tid()], dbg.get_register_value("eax")))
