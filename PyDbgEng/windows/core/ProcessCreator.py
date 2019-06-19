@@ -19,9 +19,8 @@ class ProcessCreator(UserModeSession):
                           dbg_eng_dll_path, symbols_path)
         # set creation flags
         self.follow_forks = follow_forks
-        creation_flags = DbgEng.DEBUG_PROCESS if self.follow_forks else DbgEng.DEBUG_ONLY_THIS_PROCESS
         # create debuggee process
         self.idebug_client.CreateProcess(
             Server=UserModeSession.NO_PROCESS_SERVER,
             CommandLine=command_line,
-            CreateFlags=creation_flags)
+            CreateFlags=DbgEng.DEBUG_PROCESS if self.follow_forks else DbgEng.DEBUG_ONLY_THIS_PROCESS)
