@@ -26,20 +26,19 @@ class hook:
         self.exit_hook = exit_hook
 
     def hook(self, dbg):
-        dbg.bp_set(self.address, restore=True, handler=self.__proxy_on_entry)
+        def on_entry(dbg):
+            args = list(map(dbg.get_arg, range(1, self.num_args + 1)))
 
-    def __proxy_on_entry(self, dbg):
-        args = list(map(dbg.get_arg, range(1, self.num_args + 1)))
+            # if an entry point callback was specified, call it and grab the return value.
+            if self.entry_hook:
+                self.entry_hook(dbg, args)
 
-        # if an entry point callback was specified, call it and grab the return value.
-        if self.entry_hook:
-            self.entry_hook(dbg, args)
+            # if an exit hook callback was specified, determine the function exit.
+            if self.exit_hook:
+                function_exit = dbg.get_arg(0)
 
-        # if an exit hook callback was specified, determine the function exit.
-        if self.exit_hook:
-            function_exit = dbg.get_arg(0)
-
-            # set a breakpoint on the function exit.
-            dbg.bp_set(function_exit,
-                       restore=False,
-                       handler=lambda dbg: self.exit_hook(dbg, args, dbg.get_register_value("eax")))
+                # set a breakpoint on the function exit.
+                dbg.bp_set(function_exit,
+                           restore=False,
+                           handler=lambda dbg: self.exit_hook(dbg, args, dbg.get_register_value("eax")))
+        dbg.bp_set(self.address, restore=True, handler=on_entry)
