@@ -612,10 +612,8 @@ class PyDbgEng(IDebugEventCallbacksSink):
         offset = addressof(frames_buffer)
         stride = sizeof(DbgEng._DEBUG_STACK_FRAME)
 
-        frames_list = []
-        for address_of_frame_buffer in range(offset, offset + frames_count * stride, stride):
-            frame = DbgEng._DEBUG_STACK_FRAME.from_address(
-                address_of_frame_buffer)
-            frames_list.append(frame)
+        frames_list = [
+                DbgEng._DEBUG_STACK_FRAME.from_address(i)
+                for i in range(offset, offset + frames_count * stride, stride)]
 
         return frames_list
