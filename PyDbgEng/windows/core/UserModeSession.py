@@ -65,8 +65,7 @@ class UserModeSession(PyDbgEng):
                     break
                 
             except COMError as e:
-                type, value, traceback = sys.exc_info()
-                if (type != int(STRSAFE_E_INSUFFICIENT_BUFFER)):
+                if e[0] != int(STRSAFE_E_INSUFFICIENT_BUFFER):
                     raise
                 pass
                 
