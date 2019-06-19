@@ -17,8 +17,8 @@ except ImportError:
     from comtypes.gen import DbgEng
 
 # utility functions
-BUFFER_TO_ANSI_STRING = lambda buf: buf[:buf.find("\x00")]
-BUFFER_TO_UNI_STRING = lambda buf: buf[slice(0, buf.find("\x00\x00"), 2)]
+BUFFER_TO_ANSI_STRING = lambda buf: buf[:buf.find(b"\x00")]
+BUFFER_TO_UNI_STRING = lambda buf: buf[slice(0, buf.find(b"\x00\x00"), 2)]
 
 debug_create_prototype = WINFUNCTYPE(HRESULT, POINTER(IID),
                                      POINTER(POINTER(DbgEng.IDebugClient)))
@@ -553,11 +553,11 @@ class PyDbgEng(IDebugEventCallbacksSink):
 
     def read_char_string(self, pchar_string, string_len):
         string_buffer = self.read_virtual_memory(pchar_string, string_len)
-        return BUFFER_TO_ANSI_STRING(string_buffer + "\x00")
+        return BUFFER_TO_ANSI_STRING(string_buffer + b"\x00")
 
     def read_wchar_string(self, pwchar_string, string_len):
         string_buffer = self.read_virtual_memory(pwchar_string, string_len)
-        return BUFFER_TO_UNI_STRING(string_buffer + "\x00\x00")
+        return BUFFER_TO_UNI_STRING(string_buffer + b"\x00\x00")
 
     def read_unicode_string(self, punicode_string):
         uni_struct_buffer = self.read_virtual_memory(punicode_string,
