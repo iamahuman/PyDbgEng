@@ -14,11 +14,12 @@ class KernelAttacher(PyDbgEng):
     class QuitEventWaiter(threading.Thread):
 
         def __init__(self, quit_event, abort_event, top):
+            super(QuitEventWaiter, self).__init__()
+            self.daemon = True
             self.quit_event = quit_event
             self.abort_event = abort_event
             self.top = top
-            threading.Thread.__init__(self)
-            threading.Thread.start(self)
+            self.start()
 
         def run(self):
             while not self.abort_event.is_set():
