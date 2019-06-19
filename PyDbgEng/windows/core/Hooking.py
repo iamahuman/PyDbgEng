@@ -50,6 +50,4 @@ class hook:
                        handler=self.__proxy_on_exit)
 
     def __proxy_on_exit(self, dbg):
-        ret_value = dbg.get_register_value("eax")
-        tid = dbg.get_current_tid()
-        self.exit_hook(dbg, self.arguments[tid], ret_value)
+        self.exit_hook(dbg, self.arguments[dbg.get_current_tid()], dbg.get_register_value("eax"))
