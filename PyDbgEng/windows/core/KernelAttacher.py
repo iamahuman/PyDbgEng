@@ -14,11 +14,9 @@ class KernelAttacher(PyDbgEng):
     is_deleted = False
 
     class QuitEventWaiter(threading.Thread):
-
         quit_event = None
         abort_event = None
         top = None
-
         def __init__(self, quit_event, abort_event, top):
             self.quit_event = quit_event
             self.abort_event = abort_event
@@ -27,7 +25,6 @@ class KernelAttacher(PyDbgEng):
             threading.Thread.start(self)
 
         def wait_for_quit_event(self):
-
             while not self.abort_event.is_set():
                 self.quit_event.wait(0.02)  # wait for 200ms
                 if self.quit_event.is_set():

@@ -53,28 +53,22 @@ class UserModeSession(PyDbgEng):
 
     # handle functions
     def get_handle_data(self, handle):
-
         handle_data_size = 0
         handle_data_buffer = None
-
         while True:
             handle_data_size += 256
             handle_data_buffer = create_string_buffer(handle_data_size)
-
             try:
                 self.idebug_data_spaces.ReadHandleData( handle,
                                                         DbgEng.DEBUG_HANDLE_DATA_TYPE_OBJECT_NAME,
                                                         byref(handle_data_buffer),
                                                         handle_data_size)
-
                 if handle_data_buffer.raw.find("\x00") != -1:
                     break
-
             except COMError as e:
                 if e[0] != int(STRSAFE_E_INSUFFICIENT_BUFFER):
                     raise
                 pass
-
         return BUFFER_TO_ANSI_STRING(handle_data_buffer.raw)
 
     # thread functions
