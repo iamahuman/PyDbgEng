@@ -16,10 +16,8 @@ class ProcessCreator(UserModeSession):
                  symbols_path=None):
         PyDbgEng.__init__(self, event_callbacks_sink, output_callbacks_sink,
                           dbg_eng_dll_path, symbols_path)
-        # set creation flags
-        self.follow_forks = follow_forks
         # create debuggee process
         self.idebug_client.CreateProcess(
             Server=UserModeSession.NO_PROCESS_SERVER,
             CommandLine=command_line,
-            CreateFlags=DbgEng.DEBUG_PROCESS if self.follow_forks else DbgEng.DEBUG_ONLY_THIS_PROCESS)
+            CreateFlags=DbgEng.DEBUG_PROCESS if follow_forks else DbgEng.DEBUG_ONLY_THIS_PROCESS)
