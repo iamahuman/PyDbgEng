@@ -32,9 +32,9 @@ class hook:
     def __proxy_on_entry(self, dbg):
         tid = dbg.get_current_tid()
         args = []
-        self.arguments[tid] = args
         for i in range(1, self.num_args + 1):
             args.append(dbg.get_arg(i))
+        self.arguments[tid] = args
 
         # if an entry point callback was specified, call it and grab the return value.
         if self.entry_hook:
