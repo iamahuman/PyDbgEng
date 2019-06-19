@@ -34,7 +34,6 @@ class KernelAttacher(PyDbgEng):
         super(KernelAttacher, self).__init__(*args, **kwargs)
 
         self.force_quit_flag = False
-        self.is_deleted = False
 
         # sanity check before setting initial bp
         if (event_callbacks_sink is not None
@@ -54,19 +53,15 @@ class KernelAttacher(PyDbgEng):
             Flags=DbgEng.DEBUG_ATTACH_KERNEL_CONNECTION)
 
     def __del__(self):
-        if not self.is_deleted:
-            PyDbgEng.__del__(self)
+        super(KernelAttacher, self).__del__(self)
 
-            # an extra step in kenel session termination: free dbgeng.dll
-            # this will make sure all handles are closed and PyDbgEng will
-            # be ready for another run
-            free_library_func = windll.kernel32.FreeLibrary
-
-            if self.dbgeng_dll is not None:
-                free_library_func(self.dbgeng_dll._handle)
-                self.dbgeng_dll = None
-
-            self.is_deleted = True
+        # an extra step in kenel session termination: free dbgeng.dll
+        # this will make sure all handles are closed and PyDbgEng will
+        # be ready for another run
+        dbgeng_dll = self.dbgeng_dll
+        if dbgeng_dll is not None:
+            self.dbgeng_dll = None
+            windll.kernel32.FreeLibrary(dbgeng_dll._handle)
 
     # event loop
     def event_loop_with_quit_event(self, quit_event):
@@ -75,9 +70,6 @@ class KernelAttacher(PyDbgEng):
         this is why we have to create thread that checks the given given quit event. once set it will force a debugger
         break.
         '''
-        if self.is_deleted:
-            raise DebuggerException("called when object is deleted")
-
         # sanity check on quit_event
         #if (not isinstance(quit_event, threading._Event)):
         #   raise DebuggerException("invalid type for quit event")
