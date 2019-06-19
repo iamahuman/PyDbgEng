@@ -29,7 +29,6 @@ class hook:
         dbg.bp_set(self.address, restore=True, handler=self.__proxy_on_entry)
 
     def __proxy_on_entry(self, dbg):
-        tid = dbg.get_current_tid()
         args = list(map(dbg.get_arg, range(1, self.num_args + 1)))
 
         # if an entry point callback was specified, call it and grab the return value.
