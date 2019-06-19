@@ -22,6 +22,7 @@ BUFFER_TO_UNI_STRING = lambda buf: buf[slice(0, buf.find("\x00\x00"), 2)]
 
 
 class IDebugClientCreator:
+    @staticmethod
     def create_idebug_client(dbgeng_dll):
         # DebugCreate() prototype
         debug_create_prototype = WINFUNCTYPE(
@@ -38,8 +39,6 @@ class IDebugClientCreator:
 
         # return debug_client of type POINTER(DbgEng.IDebugClient)
         return idebug_client
-
-    create_idebug_client = staticmethod(create_idebug_client)
 
 
 class IDebugOutputCallbacksSink:
