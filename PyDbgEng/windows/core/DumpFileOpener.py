@@ -1,11 +1,9 @@
 #! /user/bin/python
 # coding:UTF-8
 
-from .Defines import *
-from .DebuggerException import *
-from .PyDbgEng import *
+from .Defines import INFINITE
+from .PyDbgEng import PyDbgEng
 
-from ctypes import *
 from comtypes.gen import DbgEng
 
 
