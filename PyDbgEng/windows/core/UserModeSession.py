@@ -24,11 +24,11 @@ class UserModeSession(PyDbgEng):
             status = self.idebug_control.GetExecutionStatus()
 
             # debuggee terminated?
-            if status == DbgEng.DEBUG_STATUS_NO_DEBUGGEE:
-                # ok, no harm done. leave the function.
-                return False
-            # some other error - re throw
-            raise
+            if status != DbgEng.DEBUG_STATUS_NO_DEBUGGEE:
+                # some other error - re throw
+                raise
+            # ok, no harm done. leave the function.
+            return False
 
     def event_loop_with_user_callback(self, user_callback,
                                       user_callback_pool_interval_ms):
@@ -36,20 +36,14 @@ class UserModeSession(PyDbgEng):
             raise DebuggerException(
                 "UserModeSession.event_loop_with_user_callback(): invalid user_callback_pool_interval_ms"
             )
-        while True:
-            if self.wait_for_event(user_callback_pool_interval_ms) == False:
-                break
-            # call user callback
-            if user_callback(self) == True:
-                # user requested to quit event loop
-                break
+        while self.wait_for_event(user_callback_pool_interval_ms) != False and user_callback(self) != True:
+            pass
 
     def event_loop_with_quit_event(self, quit_event):
         #if not isinstance(quit_event, threading._Event):
         #    raise DebuggerException("UserModeSession.event_loop_with_quit_event(): invalid quit_event")
-        while not quit_event.is_set():
-            if self.wait_for_event(200) == False:
-                break
+        while not quit_event.is_set() and self.wait_for_event(200) != False:
+            pass
 
     # handle functions
     def get_handle_data(self, handle):
