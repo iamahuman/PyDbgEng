@@ -1,13 +1,15 @@
 from .DebuggerException import *
 
+
 class hook_container:
 
     hooks = []
-    def __init__ (self):
+
+    def __init__(self):
         self.hooks = []
 
-    def add (self, dbg, address, num_args, entry_hook=None, exit_hook=None):
-        
+    def add(self, dbg, address, num_args, entry_hook=None, exit_hook=None):
+
         if (entry_hook == None and exit_hook == None):
             raise DebuggerException("no entry or exit hooks")
 
@@ -17,26 +19,27 @@ class hook_container:
 
         self.hooks.append(h)
 
+
 class hook:
 
-    hooks      = None
-    address    = 0
-    num_args   = 0
+    hooks = None
+    address = 0
+    num_args = 0
     entry_hook = None
-    exit_hook  = None
-    arguments  = {}
+    exit_hook = None
+    arguments = {}
 
-    def __init__ (self, address, num_args, entry_hook=None, exit_hook=None):
-        self.address    = address
-        self.num_args   = num_args
+    def __init__(self, address, num_args, entry_hook=None, exit_hook=None):
+        self.address = address
+        self.num_args = num_args
         self.entry_hook = entry_hook
-        self.exit_hook  = exit_hook
-        self.arguments  = {}
+        self.exit_hook = exit_hook
+        self.arguments = {}
 
-    def hook (self, dbg):
+    def hook(self, dbg):
         dbg.bp_set(self.address, restore=True, handler=self.__proxy_on_entry)
 
-    def __proxy_on_entry (self, dbg):
+    def __proxy_on_entry(self, dbg):
         tid = dbg.get_current_tid()
         self.arguments[tid] = []
         for i in range(1, self.num_args + 1):
@@ -51,9 +54,11 @@ class hook:
             function_exit = dbg.get_arg(0)
 
             # set a breakpoint on the function exit.
-            dbg.bp_set(function_exit, restore=False, handler=self.__proxy_on_exit)
+            dbg.bp_set(function_exit,
+                       restore=False,
+                       handler=self.__proxy_on_exit)
 
-    def __proxy_on_exit (self, dbg):
+    def __proxy_on_exit(self, dbg):
         ret_value = dbg.get_register_value("eax")
         tid = dbg.get_current_tid()
         self.exit_hook(dbg, self.arguments[tid], ret_value)

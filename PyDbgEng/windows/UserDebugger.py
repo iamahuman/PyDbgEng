@@ -1,5 +1,6 @@
 from .DebugEventHandler import *
 
+
 class UserDebugger:
     def __init__(self):
         if sys.version.find("AMD64") != -1:
@@ -29,11 +30,12 @@ class UserDebugger:
     def run(self, proc_args, follow_forks=True):
         proc_args = proc_args.encode("ascii", "ignore")
         self.event_handler.follow_forks = follow_forks
-        self.dbg = ProcessCreator(command_line = proc_args,
-            follow_forks = follow_forks,
-            event_callbacks_sink = self.event_handler,
-            output_callbacks_sink = self.event_handler,
-            dbg_eng_dll_path = self.p)# symbols_path = SymbolsPath
+        self.dbg = ProcessCreator(
+            command_line=proc_args,
+            follow_forks=follow_forks,
+            event_callbacks_sink=self.event_handler,
+            output_callbacks_sink=self.event_handler,
+            dbg_eng_dll_path=self.p)  # symbols_path = SymbolsPath
         self.event_handler.dbg = self.dbg
         self.started.set()
         self.dbg.event_loop_with_quit_event(self.quit)
