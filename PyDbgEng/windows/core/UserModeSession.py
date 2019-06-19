@@ -20,7 +20,7 @@ class UserModeSession(PyDbgEng):
             self.idebug_control.WaitForEvent(DbgEng.DEBUG_WAIT_DEFAULT,
                                              timeout_ms)
             return True
-        except COMError as e:
+        except COMError:
             status = self.idebug_control.GetExecutionStatus()
 
             # debuggee terminated?

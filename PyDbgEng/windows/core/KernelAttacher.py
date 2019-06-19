@@ -120,7 +120,7 @@ class KernelAttacher(PyDbgEng):
                                                  INFINITE)
                 #status = self.idebug_control.GetExecutionStatus()
                 #print 'done waiting. status: '+str(status)
-            except COMError as e:
+            except COMError:
                 #print 'comerror'
                 status = self.idebug_control.GetExecutionStatus()
                 # forced break?
