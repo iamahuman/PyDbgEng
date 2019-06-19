@@ -28,9 +28,9 @@ class KernelAttacher(PyDbgEng):
 
         def wait_for_quit_event(self):
 
-            while (not self.abort_event.is_set()):
+            while not self.abort_event.is_set():
                 self.quit_event.wait(0.02)  # wait for 200ms
-                if (self.quit_event.is_set()):
+                if self.quit_event.is_set():
                     self.top.force_quit_flag = True
                     self.top.idebug_control.SetInterrupt(
                         Flags=DbgEng.DEBUG_INTERRUPT_EXIT)
@@ -53,8 +53,8 @@ class KernelAttacher(PyDbgEng):
         if (event_callbacks_sink != None
                 and isinstance(event_callbacks_sink, IDebugEventCallbacksSink)
                 and set_initial_bp):
-            if (not (event_callbacks_sink.GetInterestMask()
-                     & DbgEng.DEBUG_EVENT_EXCEPTION)):
+            if not (event_callbacks_sink.GetInterestMask()
+                     & DbgEng.DEBUG_EVENT_EXCEPTION):
                 raise DebuggerException(
                     "requested initial break, but 'exception' method is not implemented."
                 )
@@ -67,7 +67,7 @@ class KernelAttacher(PyDbgEng):
             Flags=DbgEng.DEBUG_ATTACH_KERNEL_CONNECTION)
 
     def __del__(self):
-        if (not self.is_deleted):
+        if not self.is_deleted:
             PyDbgEng.__del__(self)
 
             # an extra step in kenel session termination: free dbgeng.dll
@@ -75,7 +75,7 @@ class KernelAttacher(PyDbgEng):
             # be ready for another run
             free_library_func = windll.kernel32.FreeLibrary
 
-            if (self.dbgeng_dll != None):
+            if self.dbgeng_dll != None:
                 free_library_func(self.dbgeng_dll._handle)
                 self.dbgeng_dll = None
 
@@ -88,14 +88,14 @@ class KernelAttacher(PyDbgEng):
         this is why we have to create thread that checks the given given quit event. once set it will force a debugger
         break.
         '''
-        if (self.is_deleted):
+        if self.is_deleted:
             raise DebuggerException("called when object is deleted")
 
         # sanity check on quit_event
         #if (not isinstance(quit_event, threading._Event)):
         #   raise DebuggerException("invalid type for quit event")
         # is already set?
-        if (quit_event.is_set()):
+        if quit_event.is_set():
             # no job for us
             return
 
@@ -119,7 +119,7 @@ class KernelAttacher(PyDbgEng):
         self.__del__()
 
     def __event_loop_with_forced_break_check(self, quit_event):
-        while (True):
+        while True:
             try:
                 #print 'waiting for event'
                 self.idebug_control.WaitForEvent(DbgEng.DEBUG_WAIT_DEFAULT,

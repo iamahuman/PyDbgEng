@@ -9,8 +9,7 @@ class hook_container:
         self.hooks = []
 
     def add(self, dbg, address, num_args, entry_hook=None, exit_hook=None):
-
-        if (entry_hook == None and exit_hook == None):
+        if entry_hook == None and exit_hook == None:
             raise DebuggerException("no entry or exit hooks")
 
         # create a new hook instance and activate it.

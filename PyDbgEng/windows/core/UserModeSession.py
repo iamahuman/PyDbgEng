@@ -24,7 +24,7 @@ class UserModeSession(PyDbgEng):
             status = self.idebug_control.GetExecutionStatus()
 
             # debuggee terminated?
-            if (status == DbgEng.DEBUG_STATUS_NO_DEBUGGEE):
+            if status == DbgEng.DEBUG_STATUS_NO_DEBUGGEE:
                 # ok, no harm done. leave the function.
                 return False
             # some other error - re throw
@@ -32,23 +32,23 @@ class UserModeSession(PyDbgEng):
 
     def event_loop_with_user_callback(self, user_callback,
                                       user_callback_pool_interval_ms):
-        if (user_callback_pool_interval_ms <= 0):
+        if user_callback_pool_interval_ms <= 0:
             raise DebuggerException(
                 "UserModeSession.event_loop_with_user_callback(): invalid user_callback_pool_interval_ms"
             )
-        while (True):
-            if (self.wait_for_event(user_callback_pool_interval_ms) == False):
+        while True:
+            if self.wait_for_event(user_callback_pool_interval_ms) == False:
                 break
             # call user callback
-            if (user_callback(self) == True):
+            if user_callback(self) == True:
                 # user requested to quit event loop
                 break
 
     def event_loop_with_quit_event(self, quit_event):
-        #if (not isinstance(quit_event, threading._Event)):
+        #if not isinstance(quit_event, threading._Event):
         #    raise DebuggerException("UserModeSession.event_loop_with_quit_event(): invalid quit_event")
-        while (not quit_event.is_set()):
-            if (self.wait_for_event(200) == False):
+        while not quit_event.is_set():
+            if self.wait_for_event(200) == False:
                 break
 
     # handle functions
@@ -57,7 +57,7 @@ class UserModeSession(PyDbgEng):
         handle_data_size = 0
         handle_data_buffer = None
 
-        while (1):
+        while 1:
             handle_data_size += 256
             handle_data_buffer = create_string_buffer(handle_data_size)
 
@@ -67,7 +67,7 @@ class UserModeSession(PyDbgEng):
                                                         byref(handle_data_buffer), \
                                                         handle_data_size)
 
-                if (handle_data_buffer.raw.find("\x00") != -1):
+                if handle_data_buffer.raw.find("\x00") != -1:
                     break
 
             except COMError as e:
