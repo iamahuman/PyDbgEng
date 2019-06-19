@@ -23,22 +23,20 @@ BUFFER_TO_UNI_STRING = lambda buf: buf[slice(0, buf.find("\x00\x00"), 2)]
 debug_create_prototype = WINFUNCTYPE(HRESULT, POINTER(IID),
                                      POINTER(POINTER(DbgEng.IDebugClient)))
 
-class IDebugClientCreator:
-    @staticmethod
-    def create_idebug_client(dbgeng_dll):
-        # DebugCreate() prototype
-        debug_create_func = debug_create_prototype(("DebugCreate", dbgeng_dll))
+def create_idebug_client(dbgeng_dll):
+    # DebugCreate() prototype
+    debug_create_func = debug_create_prototype(("DebugCreate", dbgeng_dll))
 
-        # call DebugCreate()
-        idebug_client = POINTER(DbgEng.IDebugClient)()
-        idebug_client_ptr = POINTER(POINTER(
-            DbgEng.IDebugClient))(idebug_client)
-        hr = debug_create_func(DbgEng.IDebugClient._iid_, idebug_client_ptr)
-        if hr != S_OK:
-            raise DebuggerException("DebugCreate() failed with %x" % hr)
+    # call DebugCreate()
+    idebug_client = POINTER(DbgEng.IDebugClient)()
+    idebug_client_ptr = POINTER(POINTER(
+        DbgEng.IDebugClient))(idebug_client)
+    hr = debug_create_func(DbgEng.IDebugClient._iid_, idebug_client_ptr)
+    if hr != S_OK:
+        raise DebuggerException("DebugCreate() failed with %x" % hr)
 
-        # return debug_client of type POINTER(DbgEng.IDebugClient)
-        return idebug_client
+    # return debug_client of type POINTER(DbgEng.IDebugClient)
+    return idebug_client
 
 
 class IDebugOutputCallbacksSink:
@@ -140,16 +138,14 @@ class PyDbgEng(IDebugEventCallbacksSink):
         self.dbgeng_dll = windll.LoadLibrary(dbg_eng_dll_path + "\\dbgeng.dll")
 
         # create main interfaces
-        creator = IDebugClientCreator()
-
         try:
-            self.idebug_client = creator.create_idebug_client(self.dbgeng_dll)
+            self.idebug_client = create_idebug_client(self.dbgeng_dll)
         except:
             # Try registering it
             import os, sys
             os.system("%s %s -regserver" %
                       (sys.executable, self.findDbgEngEvent()))
-            self.idebug_client = creator.create_idebug_client(self.dbgeng_dll)
+            self.idebug_client = create_idebug_client(self.dbgeng_dll)
 
         self.idebug_control = self.idebug_client.QueryInterface(
             interface=DbgEng.IDebugControl)
