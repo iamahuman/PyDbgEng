@@ -20,13 +20,13 @@ except ImportError:
 BUFFER_TO_ANSI_STRING = lambda buf: buf[:buf.find("\x00")]
 BUFFER_TO_UNI_STRING = lambda buf: buf[slice(0, buf.find("\x00\x00"), 2)]
 
+debug_create_prototype = WINFUNCTYPE(HRESULT, POINTER(IID),
+                                     POINTER(POINTER(DbgEng.IDebugClient)))
 
 class IDebugClientCreator:
     @staticmethod
     def create_idebug_client(dbgeng_dll):
         # DebugCreate() prototype
-        debug_create_prototype = WINFUNCTYPE(
-            HRESULT, POINTER(IID), POINTER(POINTER(DbgEng.IDebugClient)))
         debug_create_func = debug_create_prototype(("DebugCreate", dbgeng_dll))
 
         # call DebugCreate()
