@@ -173,11 +173,11 @@ class PyDbgEng(IDebugEventCallbacksSink):
         self.idebug_system_objects = self.idebug_client.QueryInterface(
             interface=DbgEng.IDebugSystemObjects)
 
-        if symbols_path != None:
+        if symbols_path is not None:
             self.idebug_symbols.SetSymbolPath(symbols_path)
 
         # create event sink
-        if event_callbacks_sink != None:
+        if event_callbacks_sink is not None:
             # sanity check on sink
             if (not isinstance(event_callbacks_sink,
                                IDebugEventCallbacksSink)):
@@ -198,7 +198,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
             self.idebug_client.SetEventCallbacks(Callbacks=event_proxy)
 
         # create output sink
-        if output_callbacks_sink != None:
+        if output_callbacks_sink is not None:
             # sanity check on sink
             if (not isinstance(output_callbacks_sink,
                                IDebugOutputCallbacksSink)):
@@ -220,48 +220,48 @@ class PyDbgEng(IDebugEventCallbacksSink):
 
     def __del__(self):
         #print "__del__"
-        if self.idebug_client != None and self.old_event_callbacks != None:
+        if self.idebug_client is not None and self.old_event_callbacks is not None:
             self.idebug_client.SetEventCallbacks(self.old_event_callbacks)
 
-        if self.idebug_client != None and self.old_output_callbacks != None:
+        if self.idebug_client is not None and self.old_output_callbacks is not None:
             #print "__dell__ - old_output_callbacks"
             self.idebug_client.SetOutputCallbacks(self.old_output_callbacks)
 
-        if self.idebug_client != None and self.new_event_callbacks != None:
+        if self.idebug_client is not None and self.new_event_callbacks is not None:
             #print "__dell__ - new_event_callbacks"
             self.new_event_callbacks._pyDbgEng = None
             self.new_event_callbacks.IUnknown_Release(self.new_event_callbacks)
             self.new_event_callbacks = None
 
-        if self.idebug_client != None and self.new_output_callbacks != None:
+        if self.idebug_client is not None and self.new_output_callbacks is not None:
             #print "__dell__ - new_output_callbacks"
             self.new_output_callbacks._pyDbgEng = None
             self.new_output_callbacks.IUnknown_Release(
                 self.new_output_callbacks)
             self.new_output_callbacks = None
 
-        if self.idebug_system_objects != None:
+        if self.idebug_system_objects is not None:
             #print "__dell__ - idebug_system_objects"
             self.idebug_system_objects = None
 
-        if self.idebug_symbols != None:
+        if self.idebug_symbols is not None:
             #print "__dell__ - idebug_symbols"
             self.idebug_symbols = None
 
-        if self.idebug_registers != None:
+        if self.idebug_registers is not None:
             #print "__dell__ - idebug_registers"
             self.idebug_registers = None
 
-        if self.idebug_data_spaces != None:
+        if self.idebug_data_spaces is not None:
             #print "__dell__ - idebug_data_spaces"
             self.idebug_data_spaces = None
 
-        if self.idebug_control != None:
+        if self.idebug_control is not None:
             #print "__dell__ - idebug_control"
             self.idebug_control = None
 
         #print "__dell__ - idebug_client"
-        if self.idebug_client != None:
+        if self.idebug_client is not None:
             try:
                 #print "__dell__ - EndSession", self.idebug_client
                 self.idebug_client.EndSession(
@@ -291,7 +291,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 bpParams.DataAccessType, bpParams.PassCount,
                 bpParams.CurrentPassCount, bpParams.MatchThread,
                 bpParams.CommandSize, bpParams.OffsetExpressionSize)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -318,7 +318,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 exception.ExceptionInformation[12],
                 exception.ExceptionInformation[13],
                 exception.ExceptionInformation[14], firstChance)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -328,7 +328,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 & DbgEng.DEBUG_EVENT_CREATE_THREAD):
             ret = self.event_callbacks_sink.CreateThread(
                 self, Handle, DataOffset, StartOffset)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -337,7 +337,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
         if (self.event_callbacks_sink_intereset_mask
                 & DbgEng.DEBUG_EVENT_EXIT_THREAD):
             ret = self.event_callbacks_sink.ExitThread(self, ExitCode)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -353,7 +353,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 self, ImageFileHandle, Handle, BaseOffset, ModuleSize,
                 ModuleName, ImageName, CheckSum, TimeDateStamp,
                 InitialThreadHandle, ThreadDataOffset, StartOffset)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -362,7 +362,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
         if (self.event_callbacks_sink_intereset_mask
                 & DbgEng.DEBUG_EVENT_EXIT_PROCESS):
             ret = self.event_callbacks_sink.ExitProcess(self, ExitCode)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -375,7 +375,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                                                        BaseOffset, ModuleSize,
                                                        ModuleName, ImageName,
                                                        CheckSum, TimeDateStamp)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -385,7 +385,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 & DbgEng.DEBUG_EVENT_UNLOAD_MODULE):
             ret = self.event_callbacks_sink.UnloadModule(
                 self, ImageBaseName, BaseOffset)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -394,7 +394,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
         if (self.event_callbacks_sink_intereset_mask
                 & DbgEng.DEBUG_EVENT_SYSTEM_ERROR):
             ret = self.event_callbacks_sink.SystemError(self, Error, Level)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -403,7 +403,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
         if (self.event_callbacks_sink_intereset_mask
                 & DbgEng.DEBUG_EVENT_SESSION_STATUS):
             ret = self.event_callbacks_sink.SessionStatus(self, Status)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -413,7 +413,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 & DbgEng.DEBUG_EVENT_CHANGE_DEBUGGEE_STATE):
             ret = self.event_callbacks_sink.ChangeDebuggeeState(
                 self, Flags, Argument)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -423,7 +423,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 & DbgEng.DEBUG_EVENT_CHANGE_ENGINE_STATE):
             ret = self.event_callbacks_sink.ChangeEngineState(
                 self, Flags, Argument)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -433,7 +433,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
                 & DbgEng.DEBUG_EVENT_CHANGE_SYMBOL_STATE):
             ret = self.event_callbacks_sink.ChangeSymbolState(
                 self, Flags, Argument)
-            if ret != None:
+            if ret is not None:
                 return ret
 
         return DbgEng.DEBUG_STATUS_NO_CHANGE
@@ -508,7 +508,7 @@ class PyDbgEng(IDebugEventCallbacksSink):
         bp_params.AddFlags(flags)
         bp_params.SetOffset(address)
 
-        if handler != None:
+        if handler is not None:
             self.breakpoints[bp_params.GetId()] = handler
 
     # image functions

@@ -44,7 +44,7 @@ class DbgEngEventCallbacks(CoClass):
 
     def IDebugOutputCallbacks_Output(self, arg1, arg2, arg3=None):
         # >= v0.5.1
-        if arg3 == None:
+        if arg3 is None:
             unknown = None
             mask = arg1
             text = arg2
@@ -59,7 +59,7 @@ class DbgEngEventCallbacks(CoClass):
 
     def IDebugEventCallbacks_Breakpoint(self, unknown, bp=None):
         # >= v0.5.1
-        if bp == None:
+        if bp is None:
             bp = unknown
             unknown = None
         return self._pyDbgEng.Breakpoint(unknown, bp)
@@ -69,7 +69,7 @@ class DbgEngEventCallbacks(CoClass):
                                                  flags,
                                                  arg=None):
         # >= v0.5.1
-        if arg == None:
+        if arg is None:
             arg = flags
             flags = unknown
             unknown = None
@@ -77,7 +77,7 @@ class DbgEngEventCallbacks(CoClass):
 
     def IDebugEventCallbacks_ChangeEngineState(self, unknown, flags, arg=None):
         # >= v0.5.1
-        if arg == None:
+        if arg is None:
             arg = flags
             flags = unknown
             unknown = None
@@ -88,7 +88,7 @@ class DbgEngEventCallbacks(CoClass):
                                        exception,
                                        firstChance=None):
         # >= v0.5.1:
-        if firstChance == None:
+        if firstChance is None:
             firstChance = exception
             exception = unknown
             unknown = None
@@ -98,7 +98,7 @@ class DbgEngEventCallbacks(CoClass):
         # Superhack!
         self._pyDbgEng = PyDbgEng.fuzzyWuzzy
         # For v0.5.1 and on
-        if unknown == None and mask == None:
+        if unknown is None and mask is None:
             return self._pyDbgEng.GetInterestMask()
         # For v0.4 and lower
         mask[0] = self._pyDbgEng.GetInterestMask()
@@ -114,7 +114,7 @@ class DbgEngEventCallbacks(CoClass):
                                         checkSum,
                                         timeDateStamp=None):
         # >= v0.5.1
-        if timeDateStamp == None:
+        if timeDateStamp is None:
             timeDateStamp = checkSum
             checkSum = imageName
             imageName = moduleName
@@ -132,7 +132,7 @@ class DbgEngEventCallbacks(CoClass):
                                           imageBaseName,
                                           baseOffset=None):
         # >= 0.5.1
-        if baseOffset == None:
+        if baseOffset is None:
             baseOffset = imageBaseName
             imageBaseName = unknown
             unknown = None
@@ -152,7 +152,7 @@ class DbgEngEventCallbacks(CoClass):
                                            threadDataOffset,
                                            startOffset=None):
         # >= 0.5.1
-        if startOffset == None:
+        if startOffset is None:
             startOffset = threadDataOffset
             threadDataOffset = initialThreadHandle
             initialThreadHandle = timeDateStamp
@@ -173,21 +173,21 @@ class DbgEngEventCallbacks(CoClass):
 
     def IDebugEventCallbacks_ExitProcess(self, unknown, exitCode=None):
         # >= 0.5.1
-        if exitCode == None:
+        if exitCode is None:
             exitCode = unknown
             unknown = None
         return self._pyDbgEng.ExitProcess(unknown, exitCode)
 
     def IDebugEventCallbacks_SessionStatus(self, unknown, status=None):
         # >= 0.5.1
-        if status == None:
+        if status is None:
             status = unknown
             unknown = None
         return self._pyDbgEng.SessionStatus(unknown, status)
 
     def IDebugEventCallbacks_ChangeSymbolState(self, unknown, flags, arg=None):
         # >= 0.5.1
-        if arg == None:
+        if arg is None:
             arg = flags
             flags = unknown
             unknown = None
@@ -195,7 +195,7 @@ class DbgEngEventCallbacks(CoClass):
 
     def IDebugEventCallbacks_SystemError(self, unknown, error, level=None):
         # >= 0.5.1
-        if level == None:
+        if level is None:
             level = error
             error = unknown
             unknown = None
@@ -207,7 +207,7 @@ class DbgEngEventCallbacks(CoClass):
                                           dataOffset,
                                           startOffset=None):
         # >= 0.5.1
-        if startOffset == None:
+        if startOffset is None:
             startOffset = dataOffset
             dataOffset = handle
             handle = unknown
@@ -217,7 +217,7 @@ class DbgEngEventCallbacks(CoClass):
 
     def IDebugEventCallbacks_ExitThread(self, unknown, exitCode=None):
         # >= 0.5.1
-        if exitCode == None:
+        if exitCode is None:
             exitCode = unknown
             unknown = None
         return self._pyDbgEng.ExitThread(unknown, exitCode)

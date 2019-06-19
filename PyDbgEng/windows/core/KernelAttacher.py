@@ -50,7 +50,7 @@ class KernelAttacher(PyDbgEng):
         self.is_deleted = False
 
         # sanity check before setting initial bp
-        if (event_callbacks_sink != None
+        if (event_callbacks_sink is not None
                 and isinstance(event_callbacks_sink, IDebugEventCallbacksSink)
                 and set_initial_bp):
             if not (event_callbacks_sink.GetInterestMask()
@@ -75,7 +75,7 @@ class KernelAttacher(PyDbgEng):
             # be ready for another run
             free_library_func = windll.kernel32.FreeLibrary
 
-            if self.dbgeng_dll != None:
+            if self.dbgeng_dll is not None:
                 free_library_func(self.dbgeng_dll._handle)
                 self.dbgeng_dll = None
 
