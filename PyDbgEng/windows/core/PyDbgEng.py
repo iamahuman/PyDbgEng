@@ -609,10 +609,12 @@ class PyDbgEng(IDebugEventCallbacksSink):
         self.idebug_control.GetStackTrace(0, 0, 0, frames_buffer_ptr,
                                           frames_count)
 
+        offset = addressof(frames_buffer)
+        stride = sizeof(DbgEng._DEBUG_STACK_FRAME)
+
         frames_list = []
         for i in range(frames_count):
-            address_of_frame_buffer = (addressof(frames_buffer) +
-                                       i * sizeof(DbgEng._DEBUG_STACK_FRAME))
+            address_of_frame_buffer = (offset + i * stride)
             frame = DbgEng._DEBUG_STACK_FRAME.from_address(
                 address_of_frame_buffer)
             frames_list.append(frame)
