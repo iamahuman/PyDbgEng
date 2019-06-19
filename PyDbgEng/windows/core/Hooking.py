@@ -45,4 +45,4 @@ class hook:
             # set a breakpoint on the function exit.
             dbg.bp_set(function_exit,
                        restore=False,
-                       handler=lambda dbg: self.exit_hook(dbg, self.arguments[dbg.get_current_tid()], dbg.get_register_value("eax")))
+                       handler=lambda dbg: self.exit_hook(dbg, args, dbg.get_register_value("eax")))
