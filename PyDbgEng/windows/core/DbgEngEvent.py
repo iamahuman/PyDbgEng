@@ -36,182 +36,97 @@ class DbgEngEventCallbacks(CoClass):
         comtypes.connectionpoints.IConnectionPointContainer
     ]
 
-    def IDebugOutputCallbacks_Output(self, arg1, arg2, arg3=None):
-        # >= v0.5.1
-        if arg3 is None:
-            unknown = None
-            mask = arg1
-            text = arg2
-        # <= 0.4.2
-        else:
-            unknown = arg1
-            mask = arg2
-            text = arg3
+    def IDebugOutputCallbacks_Output(self, *args):
+        if len(args) == 2:
+            args = (None,) + args
         self._pyDbgEng = PyDbgEng.fuzzyWuzzy
-        self._pyDbgEng.output_callbacks_sink.Output(unknown, mask, text)
+        self._pyDbgEng.output_callbacks_sink.Output(*args)
         return S_OK
 
-    def IDebugEventCallbacks_Breakpoint(self, unknown, bp=None):
+    def IDebugEventCallbacks_Breakpoint(self, *args):
         # >= v0.5.1
-        if bp is None:
-            bp = unknown
-            unknown = None
-        return self._pyDbgEng.Breakpoint(unknown, bp)
+        if len(args) == 1:
+            args = (None,) + args
+        return self._pyDbgEng.Breakpoint(*args)
 
-    def IDebugEventCallbacks_ChangeDebuggeeState(self,
-                                                 unknown,
-                                                 flags,
-                                                 arg=None):
+    def IDebugEventCallbacks_ChangeDebuggeeState(self, *args):
         # >= v0.5.1
-        if arg is None:
-            arg = flags
-            flags = unknown
-            unknown = None
-        return self._pyDbgEng.ChangeDebuggeeState(unknown, flags, arg)
+        if len(args) == 2:
+            args = (None,) + args
+        return self._pyDbgEng.ChangeDebuggeeState(*args)
 
-    def IDebugEventCallbacks_ChangeEngineState(self, unknown, flags, arg=None):
+    def IDebugEventCallbacks_ChangeEngineState(self, *args):
         # >= v0.5.1
-        if arg is None:
-            arg = flags
-            flags = unknown
-            unknown = None
-        return self._pyDbgEng.ChangeEngineState(unknown, flags, arg)
+        if len(args) == 2:
+            args = (None,) + args
+        return self._pyDbgEng.ChangeEngineState(*args)
 
-    def IDebugEventCallbacks_Exception(self,
-                                       unknown,
-                                       exception,
-                                       firstChance=None):
+    def IDebugEventCallbacks_Exception(self, *args):
         # >= v0.5.1:
-        if firstChance is None:
-            firstChance = exception
-            exception = unknown
-            unknown = None
-        return self._pyDbgEng.Exception(unknown, exception, firstChance)
+        if len(args) == 2:
+            args = (None,) + args
+        return self._pyDbgEng.Exception(*args)
 
-    def IDebugEventCallbacks_GetInterestMask(self, unknown=None, mask=None):
+    def IDebugEventCallbacks_GetInterestMask(self, *args):
         # Superhack!
         self._pyDbgEng = PyDbgEng.fuzzyWuzzy
         # For v0.5.1 and on
-        if unknown is None and mask is None:
+        if not args:
             return self._pyDbgEng.GetInterestMask()
         # For v0.4 and lower
-        mask[0] = self._pyDbgEng.GetInterestMask()
+        args[1][0] = self._pyDbgEng.GetInterestMask()
         return S_OK
 
-    def IDebugEventCallbacks_LoadModule(self,
-                                        unknown,
-                                        imageFileHandle,
-                                        baseOffset,
-                                        moduleSize,
-                                        moduleName,
-                                        imageName,
-                                        checkSum,
-                                        timeDateStamp=None):
+    def IDebugEventCallbacks_LoadModule(self, *args):
         # >= v0.5.1
-        if timeDateStamp is None:
-            timeDateStamp = checkSum
-            checkSum = imageName
-            imageName = moduleName
-            moduleName = moduleSize
-            moduleSize = baseOffset
-            baseOffset = imageFileHandle
-            imageFileHandle = unknown
-            unknown = None
-        return self._pyDbgEng.LoadModule(unknown, imageFileHandle, baseOffset,
-                                         moduleSize, moduleName, imageName,
-                                         checkSum, timeDateStamp)
+        if len(args) == 7:
+            args = (None,) + args
+        return self._pyDbgEng.LoadModule(*args)
 
-    def IDebugEventCallbacks_UnloadModule(self,
-                                          unknown,
-                                          imageBaseName,
-                                          baseOffset=None):
+    def IDebugEventCallbacks_UnloadModule(self, *args):
         # >= 0.5.1
-        if baseOffset is None:
-            baseOffset = imageBaseName
-            imageBaseName = unknown
-            unknown = None
-        return self._pyDbgEng.UnloadModule(unknown, imageBaseName, baseOffset)
+        if len(args) == 2:
+            args = (None,) + args
+        return self._pyDbgEng.UnloadModule(*args)
 
-    def IDebugEventCallbacks_CreateProcess(self,
-                                           unknown,
-                                           imageFileHandle,
-                                           handle,
-                                           baseOffset,
-                                           moduleSize,
-                                           moduleName,
-                                           imageName,
-                                           checkSum,
-                                           timeDateStamp,
-                                           initialThreadHandle,
-                                           threadDataOffset,
-                                           startOffset=None):
+    def IDebugEventCallbacks_CreateProcess(self, *args):
         # >= 0.5.1
-        if startOffset is None:
-            startOffset = threadDataOffset
-            threadDataOffset = initialThreadHandle
-            initialThreadHandle = timeDateStamp
-            timeDataStamp = checkSum
-            checkSum = imageName
-            imageName = moduleName
-            moduleName = moduleSize
-            moduleSize = baseOffset
-            baseOffset = handle
-            handle = imageFileHandle
-            imageFileHandle = unknown
-            unknown = None
-        return self._pyDbgEng.CreateProcess(unknown, imageFileHandle, handle,
-                                            baseOffset, moduleSize, moduleName,
-                                            imageName, checkSum, timeDateStamp,
-                                            initialThreadHandle,
-                                            threadDataOffset, startOffset)
+        if len(args) == 11:
+            args = (None,) + args
+        return self._pyDbgEng.CreateProcess(*args)
 
-    def IDebugEventCallbacks_ExitProcess(self, unknown, exitCode=None):
+    def IDebugEventCallbacks_ExitProcess(self, *args):
         # >= 0.5.1
-        if exitCode is None:
-            exitCode = unknown
-            unknown = None
-        return self._pyDbgEng.ExitProcess(unknown, exitCode)
+        if len(args) == 1:
+            args = (None,) + args
+        return self._pyDbgEng.ExitProcess(*args)
 
-    def IDebugEventCallbacks_SessionStatus(self, unknown, status=None):
+    def IDebugEventCallbacks_SessionStatus(self, *args):
         # >= 0.5.1
-        if status is None:
-            status = unknown
-            unknown = None
-        return self._pyDbgEng.SessionStatus(unknown, status)
+        if len(args) == 1:
+            args = (None,) + args
+        return self._pyDbgEng.SessionStatus(*args)
 
-    def IDebugEventCallbacks_ChangeSymbolState(self, unknown, flags, arg=None):
+    def IDebugEventCallbacks_ChangeSymbolState(self, *args):
         # >= 0.5.1
-        if arg is None:
-            arg = flags
-            flags = unknown
-            unknown = None
-        return self._pyDbgEng.ChangeSymbolState(unknown, flags, arg)
+        if len(args) == 2:
+            args = (None,) + args
+        return self._pyDbgEng.ChangeSymbolState(*args)
 
-    def IDebugEventCallbacks_SystemError(self, unknown, error, level=None):
+    def IDebugEventCallbacks_SystemError(self, *args):
         # >= 0.5.1
-        if level is None:
-            level = error
-            error = unknown
-            unknown = None
-        return self._pyDbgEng.SystemError(unknown, error, level)
+        if len(args) == 2:
+            args = (None,) + args
+        return self._pyDbgEng.SystemError(*args)
 
-    def IDebugEventCallbacks_CreateThread(self,
-                                          unknown,
-                                          handle,
-                                          dataOffset,
-                                          startOffset=None):
+    def IDebugEventCallbacks_CreateThread(self, *args):
         # >= 0.5.1
-        if startOffset is None:
-            startOffset = dataOffset
-            dataOffset = handle
-            handle = unknown
-            unknown = None
-        return self._pyDbgEng.CreateThread(unknown, handle, dataOffset,
-                                           startOffset)
+        if len(args) == 3:
+            args = (None,) + args
+        return self._pyDbgEng.CreateThread(*args)
 
-    def IDebugEventCallbacks_ExitThread(self, unknown, exitCode=None):
+    def IDebugEventCallbacks_ExitThread(self, *args):
         # >= 0.5.1
-        if exitCode is None:
-            exitCode = unknown
-            unknown = None
-        return self._pyDbgEng.ExitThread(unknown, exitCode)
+        if len(args) == 1:
+            args = (None,) + args
+        return self._pyDbgEng.ExitThread(*args)
