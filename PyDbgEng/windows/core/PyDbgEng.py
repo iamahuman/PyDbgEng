@@ -34,17 +34,17 @@ def BUFFER_TO_UNI_STRING(buf):
         x += 1
 
 
+LP_IDebugClient = POINTER(DbgEng.IDebugClient)
 debug_create_prototype = WINFUNCTYPE(HRESULT, POINTER(IID),
-                                     POINTER(POINTER(DbgEng.IDebugClient)))
+                                     POINTER(LP_IDebugClient))
 
 def create_idebug_client(dbgeng_dll):
     # DebugCreate() prototype
     debug_create_func = debug_create_prototype(("DebugCreate", dbgeng_dll))
 
     # call DebugCreate()
-    idebug_client = POINTER(DbgEng.IDebugClient)()
-    idebug_client_ptr = POINTER(POINTER(DbgEng.IDebugClient))(idebug_client)
-    hr = debug_create_func(DbgEng.IDebugClient._iid_, idebug_client_ptr)
+    idebug_client = LP_IDebugClient()
+    hr = debug_create_func(DbgEng.IDebugClient._iid_, byref(idebug_client_ptr))
     if hr != S_OK:
         raise DebuggerException("DebugCreate() failed with %x" % hr)
 
