@@ -209,27 +209,22 @@ class PyDbgEng(IDebugEventCallbacksSink):
 		
 		if (self.idebug_system_objects != None):
 			#print "__dell__ - idebug_system_objects"
-			self.idebug_system_objects.Release()
 			self.idebug_system_objects = None
 		
 		if (self.idebug_symbols != None):
 			#print "__dell__ - idebug_symbols"
-			self.idebug_symbols.Release()
 			self.idebug_symbols = None
 		
 		if (self.idebug_registers != None):
 			#print "__dell__ - idebug_registers"
-			self.idebug_registers.Release()
 			self.idebug_registers = None
 		
 		if (self.idebug_data_spaces != None):
 			#print "__dell__ - idebug_data_spaces"
-			self.idebug_data_spaces.Release()
 			self.idebug_data_spaces = None
 		
 		if (self.idebug_control != None):
 			#print "__dell__ - idebug_control"
-			self.idebug_control.Release()
 			self.idebug_control = None
 		
 		#print "__dell__ - idebug_client"
@@ -237,9 +232,6 @@ class PyDbgEng(IDebugEventCallbacksSink):
 			try:
 				#print "__dell__ - EndSession", self.idebug_client
 				self.idebug_client.EndSession(DbgEng.DEBUG_END_ACTIVE_TERMINATE)
-				
-				#print "__dell__ - Release"
-				self.idebug_client.Release()
 				
 			finally:
 				self.idebug_client = None
