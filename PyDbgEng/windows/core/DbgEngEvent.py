@@ -172,7 +172,7 @@ class DbgEngEventCallbacks(CoClass):
 			dataOffset = handle
 			handle = unknown
 			unknown = None
-		return self._pyDbgEng.CreateThread(handle, unknown, dataOffset, startOffset)
+		return self._pyDbgEng.CreateThread(unknown, handle, dataOffset, startOffset)
 	
 	def IDebugEventCallbacks_ExitThread(self, unknown, exitCode = None):
 		# >= 0.5.1
